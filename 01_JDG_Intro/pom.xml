@@ -11,7 +11,7 @@
 
         <!-- **** CHANGE ME ***** -->
         <hostname>docker1.ose.opentlc.com</hostname>
-        <port>11999</port>
+        <cli.port>11999</cli.port>
         <username>admin</username>
         <password>jb0ssredhat!</password>
 
@@ -44,7 +44,7 @@
                         </scripts>
                     </execute-commands>
                     <hostname>${hostname}</hostname>
-                    <port>${port}</port>
+                    <port>${cli.port}</port>
                     <username>${username}</username>
                     <password>${password}</password>
                 </configuration>
