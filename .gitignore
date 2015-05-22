@@ -13,3 +13,6 @@ LMSClass/
 *common/
 *.jar
 target/
+.project
+.classpath
+.settings

@@ -10,8 +10,13 @@
   <!-- Usage:
        1)  replace your existing ~/.m2/settings.xml with this file
                      or
-       2)  executing maven commands using the -s flag, ie:
+       2)  execute maven commands at the command line using the -s flag, ie:
               mvn clean package -s /path/to/this/jdg-offline-settings.xml
+                    or
+        3) configure JBoss Developer Studio to use this jdg-offline-settings.xml:
+            a) In JBDS, navigate to: Window -> Preferences -> Maven -> User Settings
+            b) Modify the value of User Settings to that it reference this file
+            c) Click Apply and then Save
   -->
 
    <!-- Local Maven Repo:
