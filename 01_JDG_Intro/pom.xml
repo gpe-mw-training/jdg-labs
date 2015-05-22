@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.redhat.ge.jdg</groupId>
+    <artifactId>01_JDG_Intro</artifactId>
+    <version>1.0</version>
+
+    <properties>
+
+        <!-- **** CHANGE ME ***** -->
+        <hostname>docker1.ose.opentlc.com</hostname>
+        <port>11999</port>
+        <username>admin</username>
+        <password>jb0ssredhat!</password>
+
+
+
+        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.6</maven.compiler.source>
+    </properties>
+
+    <dependencyManagement>
+    </dependencyManagement>
+
+    <dependencies>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- JBoss AS plugin to execute CLI -->
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>${version.jboss.maven.plugin}</version>
+
+                <configuration>
+                    <execute-commands>
+                        <scripts>
+                            <script>src/main/resources/jdg_commands.cli</script>
+                        </scripts>
+                    </execute-commands>
+                    <hostname>${hostname}</hostname>
+                    <port>${port}</port>
+                    <username>${username}</username>
+                    <password>${password}</password>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
