@@ -1,5 +1,2 @@
-#batch
+/:read-attribute(name=product-name)
 
-version
-
-#run-batch

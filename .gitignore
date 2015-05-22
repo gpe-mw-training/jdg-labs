@@ -1,0 +1,15 @@
+*.class
+*~
+~lock.*
+~$*
+.DS_Store
+*.svn/
+*.nogit/
+*project/
+*projects/
+LMSClass/
+*.nogit/
+*audio/
+*common/
+*.jar
+target/

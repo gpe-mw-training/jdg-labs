@@ -1,0 +1,17 @@
+batch
+
+    # disable security on the RESTful endpoint exposed by JDG
+    /subsystem=endpoint/rest-connector=rest-connector:undefine-attribute(name=auth-method)
+    /subsystem=endpoint/rest-connector=rest-connector/:undefine-attribute(name=security-mode)
+    /subsystem=endpoint/rest-connector=rest-connector/:undefine-attribute(name=security-domain)
+
+    :reload
+
+    # ADD a local cache called 'teams
+    /subsystem=infinispan/cache-container=local/local-cache=teams:add(start=EAGER,batching=false)
+
+    # Define the locking isolation of this cache
+    /subsystem=infinispan/cache-container=local/local-cache=teams/locking=LOCKING:add(acquire-timeout=20000, concurrency-level=500, striping="false")
+
+run-batch
+
