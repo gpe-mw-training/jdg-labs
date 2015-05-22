@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.redhat.ge.jdg</groupId>
+    <artifactId>jdg-labs</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>01_JDG_Intro</module>
+        <module>02_Architecture</module>
+        <module>03_EmbeddedMode</module>
+        <module>04_EmbeddedQuery</module>
+        <module>05_CacheStore</module>
+        <module>06_ClientServerMode</module>
+        <module>07_ClientServerQuery</module>
+        <module>08_EventsAndListeners</module>
+        <module>09_Integration</module>
+        <module>10_Security</module>
+    </modules>
+
+</project>

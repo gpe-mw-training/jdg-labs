@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.redhat.ge.jdg</groupId>
-    <artifactId>01_JDG_Intro</artifactId>
+    <artifactId>02_Architecture</artifactId>
     <version>1.0</version>
 
     <properties>
