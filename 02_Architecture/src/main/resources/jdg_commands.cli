@@ -5,6 +5,7 @@ batch
     /subsystem=endpoint/rest-connector=rest-connector/:undefine-attribute(name=security-mode)
     /subsystem=endpoint/rest-connector=rest-connector/:undefine-attribute(name=security-domain)
 
+    # modifications to the JDG rest-connector require EAP to be reloaded
     :reload
 
     # ADD a local cache called 'teams

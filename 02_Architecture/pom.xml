@@ -50,6 +50,27 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
+
+            <!-- jboss-as-maven-plugin to execute CLI -->
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>${version.jboss.maven.plugin}</version>
+
+                <configuration>
+                    <execute-commands>
+                        <scripts>
+                            <script>src/main/resources/jdg_commands.cli</script>
+                        </scripts>
+                    </execute-commands>
+                    <hostname>${hostname}</hostname>
+                    <port>${cli.port}</port>
+                    <username>${username}</username>
+                    <password>${password}</password>
+                </configuration>
+            </plugin>
+
+
             <!-- This plugin permits the execution of this quickstart through mvn exec:java command -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -81,24 +102,7 @@
                 </configuration>
             </plugin>
 
-            <!-- JBoss AS plugin to execute CLI -->
-            <plugin>
-                <groupId>org.jboss.as.plugins</groupId>
-                <artifactId>jboss-as-maven-plugin</artifactId>
-                <version>${version.jboss.maven.plugin}</version>
 
-                <configuration>
-                    <execute-commands>
-                        <scripts>
-                            <script>src/main/resources/jdg_commands.cli</script>
-                        </scripts>
-                    </execute-commands>
-                    <hostname>${hostname}</hostname>
-                    <port>${cli.port}</port>
-                    <username>${username}</username>
-                    <password>${password}</password>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
