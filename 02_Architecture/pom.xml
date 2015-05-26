@@ -52,7 +52,7 @@
         <plugins>
 
             <!-- jboss-as-maven-plugin to execute CLI -->
-            <!-- execution:  mvn jboss-as:execute-commands -->
+            <!-- execution:  mvn jboss-as:execute-commands -s ~/.m2/jdg-offline-settings.xml -->
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
