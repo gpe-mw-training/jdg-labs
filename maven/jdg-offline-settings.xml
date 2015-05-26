@@ -23,7 +23,7 @@
      Default local maven repository is ~/.m2/repository
      Its recommended that student's use a fresh local maven repository.
      If you want to start and use a different local maven repository than your default, then uncomment and modifiy this next line -->
-   <!-- localRepository>/u02/maven/defaultrepo</localRepository -->
+   <localRepository>/u02/maven/defaultrepo</localRepository>
 
    <profiles>
       <profile>

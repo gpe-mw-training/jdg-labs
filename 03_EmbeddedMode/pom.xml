@@ -7,5 +7,42 @@
     <artifactId>03_EmbeddedMode</artifactId>
     <version>1.0</version>
 
+    <properties>
+
+        <!-- **** CHANGE ME ***** -->
+        <hostname>docker1.ose.opentlc.com</hostname>
+        <cli.port>11999</cli.port>
+        <username>admin</username>
+        <password>jb0ssredhat!</password>
+
+        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+    </properties>
+
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+
+            <!-- jboss-as-maven-plugin to execute CLI -->
+            <!-- execution:  mvn jboss-as:execute-commands -->
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>${version.jboss.maven.plugin}</version>
+
+                <configuration>
+                    <execute-commands>
+                        <scripts>
+                            <script>src/main/resources/jdg_commands.cli</script>
+                        </scripts>
+                    </execute-commands>
+                    <hostname>${hostname}</hostname>
+                    <port>${cli.port}</port>
+                    <username>${username}</username>
+                    <password>${password}</password>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

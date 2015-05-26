@@ -31,7 +31,9 @@
 
     <build>
         <plugins>
+
             <!-- JBoss AS plugin to execute CLI -->
+            <!-- execution:  mvn jboss-as:execute-commands -->
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
