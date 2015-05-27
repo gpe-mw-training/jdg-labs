@@ -1,0 +1,3 @@
+<jboss-web>
+    <context-root>mytodo</context-root>
+</jboss-web>

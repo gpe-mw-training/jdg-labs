@@ -6,6 +6,7 @@
     <groupId>com.redhat.ge.jdg</groupId>
     <artifactId>03_EmbeddedMode</artifactId>
     <version>1.0</version>
+    <packaging>war</packaging>
 
     <properties>
 
@@ -93,31 +94,30 @@
 
     </dependencies>
 
+        <profile>
+            <id>deploy</id>
 
-    <build>
-        <finalName>${project.artifactId}</finalName>
-        <plugins>
-
-            <!-- jboss-as-maven-plugin to execute CLI -->
-            <!-- execution:  mvn jboss-as:execute-commands -s ~/.m2/jdg-offline-settings.xml -->
-            <plugin>
+            <!-- jboss-as-maven-plugin to deploy war -->
+            <!-- execution:  mvn jboss-as:execute-commands -s ~/.m2/jdg-offline-settings.xml -P deploy -->
+            <build><plugins><plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
                 <version>${version.jboss.maven.plugin}</version>
 
                 <configuration>
                     <execute-commands>
-                        <scripts>
-                            <script>src/main/resources/jdg_commands.cli</script>
-                        </scripts>
+                        <commands>
+                            <command>deploy target/${project.name}-${project.version}.war </command>
+                        </commands>
                     </execute-commands>
                     <hostname>${hostname}</hostname>
                     <port>${cli.port}</port>
                     <username>${username}</username>
                     <password>${password}</password>
+                    <timeout>10000</timeout>
                 </configuration>
-            </plugin>
-        </plugins>
-    </build>
+            </plugin></plugins></build>
+        </profile>
+    </profiles>
 
 </project>
