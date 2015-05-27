@@ -12,7 +12,7 @@
 
         <!-- **** CHANGE ME ***** -->
         <hostname>docker1.ose.opentlc.com</hostname>
-        <cli.port>11999</cli.port>
+        <cli.port>9999</cli.port>
         <username>admin</username>
         <password>jb0ssredhat!</password>
 
@@ -94,6 +94,7 @@
 
     </dependencies>
 
+    <profiles>
         <profile>
             <id>deploy</id>
 
