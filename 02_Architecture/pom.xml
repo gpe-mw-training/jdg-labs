@@ -26,8 +26,8 @@
 
         <!-- **** CHANGE ME ***** -->
         <hostname>docker1.ose.opentlc.com</hostname>
-        <cli.port>11999</cli.port>
-        <http.port>10080</http.port>
+        <cli.port>9999</cli.port>
+        <http.port>8080</http.port>
         <username>admin</username>
         <password>jb0ssredhat!</password>
         <jdg.rest.context.path>/rest</jdg.rest.context.path>

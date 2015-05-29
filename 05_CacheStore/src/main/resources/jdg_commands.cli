@@ -1,0 +1,42 @@
+batch
+
+    # modifications to the to the JGroups TCP stack such that discovery occurrs via FILE_PING protocol
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=MPING)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=MERGE2)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=FD_SOCK)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=FD)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=VERIFY_SUSPECT)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=pbcast.NAKACK)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=UNICAST2)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=pbcast.STABLE)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=pbcast.GMS)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=UFC)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=MFC)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=FRAG2)
+    /subsystem=jgroups/stack=tcp/:remove-protocol(type=RSVP)
+
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=FILE_PING)
+
+    # value corresponds to shared docker volume
+    /subsystem=jgroups/stack=tcp/protocol=FILE_PING/property=location/:add(value="/opt/shared/jdg-cluster-discovery")
+
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=MERGE2)
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=FD_SOCK,socket-binding="jgroups-tcp-fd")
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=FD)
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=VERIFY_SUSPECT)
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=pbcast.NAKACK)
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=UNICAST2)
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=pbcast.STABLE)
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=pbcast.GMS)
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=UFC)
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=MFC)
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=FRAG2)
+    /subsystem=jgroups/stack=tcp/:add-protocol(type=RSVP)
+
+    # make the tcp stack the default
+    /subsystem=jgroups/:write-attribute(name=default-stack,value=tcp)
+    
+    :reload
+
+run-batch
+
