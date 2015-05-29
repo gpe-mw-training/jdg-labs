@@ -2,6 +2,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="urn:org:jgroups file:schema/JGroups-2.8.xsd">
 
+    <!-- 
+        - Since JDG Embedded/Library mode is being used in this lab, this JGroups protocol stack config gets included in our web application.
+        - The existing JGroups protocol stack found in JBoss EAP (ie:  standalone-ha.xml) is used only by the internal Infinispan subsystem.
+            - Subsequently, our web app deployed to JBoss EAP uses this JGroups protocol stack and NOT the those that are specific to the EAP Infinispan subsystem.
+    -->
     <TCP bind_port="7800"
          recv_buf_size="${tcp.recv_buf_size:5M}"
          send_buf_size="${tcp.send_buf_size:5M}"
