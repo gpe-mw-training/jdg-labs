@@ -25,7 +25,7 @@ public class Task implements Serializable {
 	@Version
 	private int version;
 
-	@Field(store = Store.YES)
+	@Field(store = Store.NO)
 	private String title;
 
 	private boolean done;
