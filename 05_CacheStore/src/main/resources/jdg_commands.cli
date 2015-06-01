@@ -1,35 +1,12 @@
 batch
 
-    # modifications to the to the JGroups TCP stack such that discovery occurrs via FILE_PING protocol
-    /subsystem=jgroups/stack=tcp/:remove-protocol(type=MPING)
-    /subsystem=jgroups/stack=tcp/:remove-protocol(type=MERGE3)
-    /subsystem=jgroups/stack=tcp/:remove-protocol(type=FD_SOCK)
-    /subsystem=jgroups/stack=tcp/:remove-protocol(type=FD_ALL)
-    /subsystem=jgroups/stack=tcp/:remove-protocol(type=VERIFY_SUSPECT)
-    /subsystem=jgroups/stack=tcp/:remove-protocol(type=pbcast.NAKACK2)
-    /subsystem=jgroups/stack=tcp/:remove-protocol(type=UNICAST3)
-    /subsystem=jgroups/stack=tcp/:remove-protocol(type=pbcast.STABLE)
-    /subsystem=jgroups/stack=tcp/:remove-protocol(type=pbcast.GMS)
-    /subsystem=jgroups/stack=tcp/:remove-protocol(type=MFC)
-    /subsystem=jgroups/stack=tcp/:remove-protocol(type=FRAG2)
+    # disable security on the RESTful endpoint exposed by JDG
+    /subsystem=endpoint/rest-connector=rest-connector:undefine-attribute(name=auth-method)
+    /subsystem=endpoint/rest-connector=rest-connector/:undefine-attribute(name=security-mode)
+    /subsystem=endpoint/rest-connector=rest-connector/:undefine-attribute(name=security-domain)
 
-    /subsystem=jgroups/stack=tcp/:add-protocol(type=FILE_PING)
-
-    # value corresponds to shared docker volume
-    /subsystem=jgroups/stack=tcp/protocol=FILE_PING/property=location/:add(value="/opt/shared/jdg-cluster-discovery")
-
-    /subsystem=jgroups/stack=tcp/:add-protocol(type=MERGE3)
-    /subsystem=jgroups/stack=tcp/:add-protocol(type=FD_SOCK,socket-binding="jgroups-tcp-fd")
-    /subsystem=jgroups/stack=tcp/:add-protocol(type=FD_ALL)
-    /subsystem=jgroups/stack=tcp/:add-protocol(type=VERIFY_SUSPECT)
-    /subsystem=jgroups/stack=tcp/:add-protocol(type=pbcast.NAKACK2)
-    /subsystem=jgroups/stack=tcp/:add-protocol(type=UNICAST3)
-    /subsystem=jgroups/stack=tcp/:add-protocol(type=pbcast.STABLE)
-    /subsystem=jgroups/stack=tcp/:add-protocol(type=pbcast.GMS)
-    /subsystem=jgroups/stack=tcp/:add-protocol(type=MFC)
-    /subsystem=jgroups/stack=tcp/:add-protocol(type=FRAG2)
-
+    # modifications to the JDG rest-connector require EAP to be reloaded
     :reload
-    
+
 run-batch
 

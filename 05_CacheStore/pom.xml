@@ -31,6 +31,7 @@
         <http.port>8080</http.port>
         <username>admin</username>
         <password>jb0ssredhat!</password>
+        <jdg.cache.name>default</jdg.cache.name>
         <jdg.rest.context.path>/rest</jdg.rest.context.path>
 
 
@@ -99,6 +100,10 @@
                         <systemProperty>
                             <key>jdg.rest.context.path</key>
                             <value>${jdg.rest.context.path}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>jdg.cache.name</key>
+                            <value>${jdg.cache.name}</value>
                         </systemProperty>
                     </systemProperties>
                 </configuration>
