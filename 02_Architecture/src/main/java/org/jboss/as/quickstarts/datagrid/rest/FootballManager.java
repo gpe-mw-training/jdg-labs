@@ -33,6 +33,7 @@ public class FootballManager {
     // REST specific properties
     public static final String HTTP_PORT = "jdg.http.port";
     public static final String REST_CONTEXT_PATH = "jdg.rest.context.path";
+    public static final String CACHE_NAME = "jdg.cache.name";
 
     private static final String msgTeamMissing = "The specified team \"%s\" does not exist, choose next operation\n";
     private static final String msgEnterTeamName = "Enter team name: ";
@@ -40,6 +41,7 @@ public class FootballManager {
             + "ap  -  add a player to a team\n" + "rt  -  remove a team\n" + "rp  -  remove a player from a team\n"
             + "p   -  print all teams and players\n" + "q   -  quit\n";
     private static final String teamsKey = "teams";
+    private String cacheName = "teams";
 
     private Console con;
     private RESTCache<String, Object> cache;
@@ -50,8 +52,14 @@ public class FootballManager {
         if (contextPath.length() > 0 && !contextPath.startsWith("/")) {
             contextPath = "/" + contextPath;
         }
-        cache = new RESTCache<String, Object>("teams", "http://" + System.getProperty(JDG_HOST) + ":" + System.getProperty(HTTP_PORT)
-                + contextPath + "/");
+        String cacheNameString = System.getProperty(CACHE_NAME);
+        if ((cacheNameString != null) && (cacheNameString.length() > 0)) {
+            cacheName = cacheNameString;
+        }
+        
+        String cacheUrl = "http://" + System.getProperty(JDG_HOST) + ":" + System.getProperty(HTTP_PORT) + contextPath + "/";
+        System.out.println("FootballManager() cacheUrl = "+cacheUrl+cacheName+"\n");
+        cache = new RESTCache<String, Object>(cacheName, cacheUrl);
         List<String> teams = (List<String>) cache.get(teamsKey);
         if (teams == null) {
             teams = new ArrayList<String>();
