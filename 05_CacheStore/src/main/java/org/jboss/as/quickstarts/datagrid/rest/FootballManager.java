@@ -35,7 +35,7 @@ public class FootballManager {
     public static final String REST_CONTEXT_PATH = "jdg.rest.context.path";
     public static final String CACHE_NAME = "jdg.cache.name";
 
-    private static final String msgTeamMissing = "The specified team \"%s\" does not exist, choose next operation\n";
+    private static final String msgTeamMissing = "The specified team entry \"%s\" does not exist in the data grid\n";
     private static final String msgEnterTeamName = "Enter team name: ";
     private static final String initialPrompt = "Choose action:\n" + "============= \n" + "at  -  add a team\n"
             + "ap  -  add a player to a team\n" + "rt  -  remove a team\n" + "rp  -  remove a player from a team\n"
@@ -130,7 +130,8 @@ public class FootballManager {
         if(teams != null) {
             teams.remove(teamName);
             localMap.put(teamsKey, teams);
-        }
+            System.out.println("removeTeam() just removed the following key from the List<String> of teams: "+teamName+"\n");
+       }
     }
 
     public void listTeams() {
@@ -149,8 +150,8 @@ public class FootballManager {
     public void printTeams() {
         @SuppressWarnings("unchecked")
         List<String> teams = (List<String>) localMap.get(teamsKey);
-        System.out.println("printTeams number of cached entries = "+teams.size());
         if (teams != null) {
+            System.out.println("printTeams number of cached entries = "+teams.size());
             for (String teamName : teams) {
                 String encodedTeam = encode(teamName);
                 Object cachedTeam = localMap.get(encodedTeam);
@@ -158,7 +159,7 @@ public class FootballManager {
                 if(cachedTeam != null) {
                     con.printf(cachedTeam.toString());
                 }else {
-                    con.printf("printTeams() **** following team is referenced in the Teams List but appears to no longer exist as an entry in the grid: "+encodedTeam+"\nWas this team evicted from the grid?");
+                    con.printf("printTeams() **** following team is referenced in the Teams List but appears to no longer exist as an entry in the grid: "+encodedTeam+"\nWas this team evicted from the grid?\n");
                 }
             }
         }else {

@@ -48,7 +48,7 @@ class RESTCache<K, V> implements ConcurrentMap<K, V> {
 
     private String doOperation(String method, String key, Object value) {
         try {
-            System.out.println("method = "+method+" : key = "+key);
+            //System.out.println("method = "+method+" : key = "+key);
             URL url = key == null ? new URL(basicUrl) : new URL(basicUrl + "/" + key);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(method);

@@ -1,0 +1,17 @@
+batch
+# postgresql module
+/subsystem=datasources/jdbc-driver=postgresql/:add(driver-name=postgresql,driver-module-name=org.postgresql.jdbc,driver-xa-datasource-class-name=org.postgresql.xa.PGXADataSource,jdbc-compliant=false)
+
+# jdgcachestore database connection pool to postgresql RDBMS
+/subsystem=datasources/data-source=jdgcachestore-cp:add(jndi-name=java:jboss/datasources/jdgcachestore-cp,connection-url="${pgsql.jdg.connection_url}jdgcachestore",driver-class=org.postgresql.Driver,driver-name=postgresql,user-name=${pgsql.jdg.user},password=${pgsql.jdg.password},pool-name=jdgcachestore_ds_pool,max-pool-size=5,min-pool-size=0,jta=true,allocation-retry=12,allocation-retry-wait-millis=10000)
+/subsystem=datasources/data-source=jdgcachestore-cp/:write-attribute(name=new-connection-sql,value="select 1")
+/subsystem=datasources/data-source=jdgcachestore-cp:enable()
+
+# Add "string-keyed-jdbc-store" to "teams" cache
+/subsystem=infinispan/cache-container=gpeclustered/distributed-cache=teams/string-keyed-jdbc-store=teamsJdbcCacheStore/:add(datasource=java:jboss/datasources/jdgcachestore-cp)
+/subsystem=infinispan/cache-container=gpeclustered/distributed-cache=teams/string-keyed-jdbc-store=teamsJdbcCacheStore/:write-attribute(name=string-keyed-table,value={"prefix" => "jdg","id-column" => {"name" => "id","type" => expression "VARCHAR(255)"},"data-column" => {"name" => "datum","type" => expression "bytea"},"timestamp-column" => {"name" => "version","type" => expression "BIGINT"}})
+/subsystem=infinispan/cache-container=gpeclustered/distributed-cache=teams/string-keyed-jdbc-store=teamsJdbcCacheStore/:write-attribute(name=shared,value=true)
+
+:reload
+
+run-batch

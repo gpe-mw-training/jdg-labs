@@ -33,7 +33,7 @@
         <password>jb0ssredhat!</password>
         <jdg.rest.context.path>/gpeclustered/rest</jdg.rest.context.path>
         <jdg.cache.name>teams</jdg.cache.name>
-
+        <cli.script>jdg_initialsetup.cli</cli.script> 
 
         <main.class.rest-endpoint>org.jboss.as.quickstarts.datagrid.rest.FootballManager</main.class.rest-endpoint>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
@@ -63,7 +63,7 @@
                 <configuration>
                     <execute-commands>
                         <scripts>
-                            <script>src/main/resources/jdg_commands.cli</script>
+                            <script>src/main/resources/${cli.script}</script>
                         </scripts>
                     </execute-commands>
                     <hostname>${hostname}</hostname>

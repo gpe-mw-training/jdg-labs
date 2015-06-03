@@ -3,7 +3,7 @@ batch
     # create a new jgroups stack called:  "teamsstack"
     /subsystem=jgroups/stack=teamsstack:add()
 
-    # Using MPING rather than FILE_PING due to:  https://developer.jboss.org/message/932616#932616
+    # Reverting back to use of MPING rather than FILE_PING due to:  https://developer.jboss.org/message/932616#932616
     #/subsystem=jgroups/stack=teamsstack/:add-protocol(type=FILE_PING)
     # value corresponds to shared docker volume
     #/subsystem=jgroups/stack=teamsstack/protocol=FILE_PING/property=location/:add(value="/opt/shared/jdg-cluster-discovery")
@@ -35,7 +35,7 @@ batch
     # context-path=/gpeclustered will set a context-path of:  <server_url>:<port>/gpeclustered/rest
     /subsystem=endpoint/rest-connector=gpeclustered/:add(cache-container=gpeclustered,context-path=/gpeclustered,extended-headers=ON_DEMAND,security-mode=READ_WRITE)
 
-    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=teams/eviction=EVICTION:add(strategy="LRU",max-entries=5)
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=teams/eviction=EVICTION:add(strategy="LRU",max-entries=3)
     
     # previous modifications to the JDG server require EAP to be reloaded
     :reload
