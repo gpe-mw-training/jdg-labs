@@ -39,12 +39,13 @@ public class FootballManager {
     private static final String msgEnterTeamName = "Enter team name: ";
     private static final String initialPrompt = "Choose action:\n" + "============= \n" + "at  -  add a team\n"
             + "ap  -  add a player to a team\n" + "rt  -  remove a team\n" + "rp  -  remove a player from a team\n"
+            + "l   -  list all teams\n"
             + "p   -  print all teams and players\n" + "q   -  quit\n";
     private static final String teamsKey = "teams";
     private String cacheName = "teams";
 
     private Console con;
-    private RESTCache<String, Object> cache;
+    private RESTCache<String, Object> localMap;
 
     public FootballManager(Console con) {
         this.con = con;
@@ -59,43 +60,43 @@ public class FootballManager {
         
         String cacheUrl = "http://" + System.getProperty(JDG_HOST) + ":" + System.getProperty(HTTP_PORT) + contextPath + "/";
         System.out.println("FootballManager() cacheUrl = "+cacheUrl+cacheName+"\n");
-        cache = new RESTCache<String, Object>(cacheName, cacheUrl);
-        List<String> teams = (List<String>) cache.get(teamsKey);
+        localMap = new RESTCache<String, Object>(cacheName, cacheUrl);
+        List<String> teams = (List<String>) localMap.get(teamsKey);
         if (teams == null) {
             teams = new ArrayList<String>();
             Team t = new Team("Barcelona");
             t.addPlayer("Messi");
             t.addPlayer("Pedro");
             t.addPlayer("Puyol");
-            cache.put(t.getName(), t);
+            localMap.put(t.getName(), t);
             teams.add(t.getName());
+            localMap.put(teamsKey, teams);
         }
-        cache.put(teamsKey, teams);
     }
 
     public void addTeam() {
         String teamName = con.readLine(msgEnterTeamName);
         @SuppressWarnings("unchecked")
-        List<String> teams = (List<String>) cache.get(encode(teamsKey));
+        List<String> teams = (List<String>) localMap.get(encode(teamsKey));
         if (teams == null) {
             teams = new ArrayList<String>();
         }
         Team t = new Team(teamName);
-        cache.put(encode(teamName), t);
+        localMap.put(encode(teamName), t);
         teams.add(teamName);
         // maintain a list of teams under common key
-        cache.put(teamsKey, teams);
+        localMap.put(teamsKey, teams);
     }
 
     public void addPlayers() {
         String teamName = con.readLine(msgEnterTeamName);
         String playerName = null;
-        Team t = (Team) cache.get(encode(teamName));
+        Team t = (Team) localMap.get(encode(teamName));
         if (t != null) {
             while (!(playerName = con.readLine("Enter player's name (to stop adding, type \"q\"): ")).equals("q")) {
                 t.addPlayer(playerName);
             }
-            cache.put(encode(teamName), t);
+            localMap.put(encode(teamName), t);
         } else {
             con.printf(msgTeamMissing, teamName);
         }
@@ -104,10 +105,10 @@ public class FootballManager {
     public void removePlayer() {
         String playerName = con.readLine("Enter player's name: ");
         String teamName = con.readLine("Enter player's team: ");
-        Team t = (Team) cache.get(encode(teamName));
+        Team t = (Team) localMap.get(encode(teamName));
         if (t != null) {
             t.removePlayer(playerName);
-            cache.put(encode(teamName), t);
+            localMap.put(encode(teamName), t);
         } else {
             con.printf(msgTeamMissing, teamName);
         }
@@ -115,27 +116,53 @@ public class FootballManager {
 
     public void removeTeam() {
         String teamName = con.readLine(msgEnterTeamName);
-        Team t = (Team) cache.get(encode(teamName));
+
+        // Remove entry from JDG server grid
+        Team t = (Team) localMap.get(encode(teamName));
         if (t != null) {
-            cache.remove(encode(teamName));
-            @SuppressWarnings("unchecked")
-            List<String> teams = (List<String>) cache.get(teamsKey);
-            if (teams != null) {
-                teams.remove(teamName);
-            }
-            cache.put(teamsKey, teams);
+            localMap.remove(encode(teamName));
         } else {
             con.printf(msgTeamMissing, teamName);
+        }
+
+        // Remove key from List of teams 
+        List<String> teams = (List<String>) localMap.get(teamsKey);
+        if(teams != null) {
+            teams.remove(teamName);
+            localMap.put(teamsKey, teams);
+        }
+    }
+
+    public void listTeams() {
+        List<String> teams = (List<String>) localMap.get(teamsKey);
+        if (teams != null) {
+            int x=1;
+            for (String teamName : teams) {
+                con.printf(x +") "+teamName+"\n");
+                x++;
+            }
+        }else {
+            System.out.println("listTeams() no teams found in cache: "+teamsKey);
         }
     }
 
     public void printTeams() {
         @SuppressWarnings("unchecked")
-        List<String> teams = (List<String>) cache.get(teamsKey);
+        List<String> teams = (List<String>) localMap.get(teamsKey);
+        System.out.println("printTeams number of cached entries = "+teams.size());
         if (teams != null) {
             for (String teamName : teams) {
-                con.printf(cache.get(encode(teamName)).toString());
+                String encodedTeam = encode(teamName);
+                Object cachedTeam = localMap.get(encodedTeam);
+                System.out.println("encodedTeam = "+encodedTeam+" : cachedTeam = "+cachedTeam);
+                if(cachedTeam != null) {
+                    con.printf(cachedTeam.toString());
+                }else {
+                    con.printf("printTeams() **** following team is referenced in the Teams List but appears to no longer exist as an entry in the grid: "+encodedTeam+"\nWas this team evicted from the grid?");
+                }
             }
+        }else {
+           System.out.println("printTeams() no teams found in cache: "+teamsKey); 
         }
     }
 
@@ -154,6 +181,8 @@ public class FootballManager {
                 manager.removeTeam();
             } else if ("rp".equals(action)) {
                 manager.removePlayer();
+            } else if ("l".equals(action)) {
+                manager.listTeams();
             } else if ("p".equals(action)) {
                 manager.printTeams();
             } else if ("q".equals(action)) {
