@@ -1,0 +1,28 @@
+batch
+    # Create two new caches:  "addressbook"  and   "addressbook_indexed"
+
+    # Create "addressbook" cache in the new "gpeclustered" cache-container
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=addressbook/:add(mode=SYNC,virtual-nodes=1,indexing=NONE,capacity-factor=1.0,queue-flush-interval=10,start=LAZY,l1-lifespan=0,owners=2,segments=80,remote-timeout=15000,queue-size=0,statistics=true)
+
+    # Add eviction policy with a jdbc cachestore to "addressbook" cache
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=addressbook/eviction=EVICTION:add(strategy="LRU",max-entries=3)
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=addressbook/string-keyed-jdbc-store=addressbookJdbcCacheStore/:add(datasource=java:jboss/datasources/jdgcachestore-cp)
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=addressbook/string-keyed-jdbc-store=addressbookJdbcCacheStore/:write-attribute(name=string-keyed-table,value={"prefix" => "jdg","id-column" => {"name" => "id","type" => expression "VARCHAR(255)"},"data-column" => {"name" => "datum","type" => expression "bytea"},"timestamp-column" => {"name" => "version","type" => expression "BIGINT"}})
+
+
+    # Create "addressbook_indexed" cache in the new "gpeclustered" cache-container
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=addressbook_indexed/:add(mode=SYNC,virtual-nodes=1,indexing=NONE,capacity-factor=1.0,queue-flush-interval=10,start=LAZY,l1-lifespan=0,owners=2,segments=80,remote-timeout=15000,queue-size=0,statistics=true)
+
+    # Add eviction policy with a jdbc cachestore to "addressbook_indexed" cache
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=addressbook_indexed/eviction=EVICTION:add(strategy="LRU",max-entries=3)
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=addressbook_indexed/string-keyed-jdbc-store=addressbookindexedJdbcCacheStore/:add(datasource=java:jboss/datasources/jdgcachestore-cp)
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=addressbook_indexed/string-keyed-jdbc-store=addressbookindexedJdbcCacheStore/:write-attribute(name=string-keyed-table,value={"prefix" => "jdg","id-column" => {"name" => "id","type" => expression "VARCHAR(255)"},"data-column" => {"name" => "datum","type" => expression "bytea"},"timestamp-column" => {"name" => "version","type" => expression "BIGINT"}})
+
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=addressbook_indexed/:write-attribute(name=indexing,value=LOCAL)
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=addressbook_indexed/:write-attribute(name=indexing-properties,value={"default.directory_provider" => "ram"})
+    
+    # previous modifications to the JDG server require EAP to be reloaded
+    :reload
+
+run-batch
+

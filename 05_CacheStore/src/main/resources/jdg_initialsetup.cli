@@ -26,7 +26,7 @@ batch
     /subsystem=infinispan/cache-container=gpeclustered/:add(module=org.jboss.as.clustering.infinispan,start=LAZY)
     /subsystem=infinispan/cache-container=gpeclustered/transport=TRANSPORT:add(stack=teamsstack,cluster=gpecluster)
 
-    # Create "teams" cache in the new gpeclustered cache-container
+    # Create "teams" cache in the new "gpeclustered" cache-container
     /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=teams/:add(mode=SYNC,virtual-nodes=1,indexing=NONE,capacity-factor=1.0,queue-flush-interval=10,start=LAZY,l1-lifespan=0,owners=2,segments=80,remote-timeout=15000,queue-size=0,statistics=true)
 
     # Only one rest enpoint allowed.  Subsequently, will remove original and replace

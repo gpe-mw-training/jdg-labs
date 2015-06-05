@@ -45,6 +45,8 @@ public class Config {
 
 			
 			Properties properties = new Properties();
+
+                        // Specify use of an in-memory, RAM-based index store to optimize query performance
 			properties.put("default.directory_provider", "ram");
 
 			Configuration loc = new ConfigurationBuilder().jmxStatistics()
