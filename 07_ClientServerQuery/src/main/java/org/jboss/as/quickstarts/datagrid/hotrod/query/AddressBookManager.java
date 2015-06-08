@@ -85,7 +85,7 @@ public class AddressBookManager {
       final int hotrodPort = Integer.parseInt(jdgProperty(HOTROD_PORT));
       final String cacheName = jdgProperty(CACHE_NAME);  // The name of the address book  cache, as defined in your server config.
 
-        System.out.println("AddressBookManager() cacheName = "+cacheName);
+      System.out.println("AddressBookManager() cacheName = "+cacheName);
 
       ConfigurationBuilder builder = new ConfigurationBuilder();
       builder.addServer()
