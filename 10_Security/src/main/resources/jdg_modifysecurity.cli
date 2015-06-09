@@ -1,0 +1,30 @@
+batch
+
+    # Enable authentication against ApplicationRealm using the DIGEST-MD5 SASL mechanism:
+    /subsystem=endpoint/hotrod-connector=hotrod-connector/authentication=AUTHENTICATION:add(security-realm="ApplicationRealm")
+
+    # set server-name="football", which is the name that the server declares to incoming clients and therefore the client configuration must match
+    /subsystem=endpoint/hotrod-connector=hotrod-connector/authentication=AUTHENTICATION/sasl=SASL:add(server-name="football", mechanisms=["DIGEST-MD5"], qop=["auth"])
+
+    #/subsystem=endpoint/hotrod-connector=hotrod-connector/authentication=AUTHENTICATION/sasl=SASL/sasl-policy=SASL_POLICY:add(no-anonymous=true)
+    /subsystem=endpoint/hotrod-connector=hotrod-connector/authentication=AUTHENTICATION/sasl=SASL/property=com.sun.security.sasl.digest.utf8/:add(name=value,value=true)
+
+    # Enable authorization on the `gpeclustered` cache container
+    /subsystem=infinispan/cache-container=gpeclustered/security=SECURITY:add()
+    /subsystem=infinispan/cache-container=gpeclustered/security=SECURITY/authorization=AUTHORIZATION/:add()
+    /subsystem=infinispan/cache-container=gpeclustered/security=SECURITY/authorization=AUTHORIZATION/:write-attribute(name=mapper,value=org.infinispan.security.impl.IdentityRoleMapper)
+
+    # Define authorization rules for "coach" and "player" roles
+    /subsystem=infinispan/cache-container=gpeclustered/security=SECURITY/authorization=AUTHORIZATION/role=coach/:add(permissions=["READ WRITE"],name=coach)
+    /subsystem=infinispan/cache-container=gpeclustered/security=SECURITY/authorization=AUTHORIZATION/role=player/:add(permissions=["READ"],name=player)
+
+    # Enable authorization on the `teams` cache
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=teams/security=SECURITY/:add
+    /subsystem=infinispan/cache-container=gpeclustered/distributed-cache=teams/security=SECURITY/authorization=AUTHORIZATION/:add(roles=["coach","player"])
+    
+
+    # previous modifications to the JDG server require EAP to be reloaded
+    :reload
+
+run-batch
+

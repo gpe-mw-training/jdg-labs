@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-    JBoss, Home of Professional Open Source
+              JBoss, Home of Professional Open Source
     Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
     contributors by the @authors tag. See the copyright.txt in the
     distribution for a full listing of individual contributors.
@@ -22,6 +22,115 @@
     <groupId>com.redhat.ge.jdg</groupId>
     <artifactId>10_Security</artifactId>
     <version>1.0</version>
+
+    <properties>
+
+        <!-- **** CHANGE ME ***** -->
+        <hostname>docker1.ose.opentlc.com</hostname>
+        <cli.port>9999</cli.port>
+        <cli.script>jdg_modifysecurity.cli</cli.script>
+        <username>admin</username>
+        <password>jb0ssredhat!</password>
+        <hotrod.port>11222</hotrod.port>
+
+        <main.class.endpoint>org.jboss.as.quickstarts.datagrid.hotrod.FootballManager</main.class.endpoint>
+        <version.infinispan>6.3.0.ER3-redhat-1</version.infinispan>
+        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <exec.plugin.version>1.2.1</exec.plugin.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${version.infinispan}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Import the infinispan core -->
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Import the Infinispan client hotrod -->
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-client-hotrod</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+
+            <!-- jboss-as-maven-plugin to execute CLI -->
+            <!-- execution:  mvn jboss-as:execute-commands -s ~/.m2/jdg-offline-settings.xml -->
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>${version.jboss.maven.plugin}</version>
+
+                <configuration>
+                    <execute-commands>
+                        <scripts>
+                            <script>src/main/resources/${cli.script}</script>
+                        </scripts>
+                    </execute-commands>
+                    <hostname>${hostname}</hostname>
+                    <port>${cli.port}</port>
+                    <username>${username}</username>
+                    <password>${password}</password>
+                </configuration>
+            </plugin>
+
+            <!-- This plugin permits the execution of this quickstart through mvn exec:java command -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>${main.class.endpoint}</mainClass>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>jdg.host</key>
+                            <value>${hostname}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>jdg.hotrod.port</key>
+                            <value>${hotrod.port}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>jdg.rest.context.path</key>
+                            <value>${jdg.rest.context.path}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>jdg.cache.name</key>
+                            <value>${jdg.cache.name}</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
 
 
 </project>
