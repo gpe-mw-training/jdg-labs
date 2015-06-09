@@ -32,6 +32,7 @@
         <username>admin</username>
         <password>jb0ssredhat!</password>
         <hotrod.port>11222</hotrod.port>
+        <hotrod.security.server.name>football</hotrod.security.server.name>
 
         <main.class.endpoint>org.jboss.as.quickstarts.datagrid.hotrod.FootballManager</main.class.endpoint>
         <version.infinispan>6.3.0.ER3-redhat-1</version.infinispan>
@@ -124,6 +125,10 @@
                         <systemProperty>
                             <key>jdg.cache.name</key>
                             <value>${jdg.cache.name}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>hotrod.security.server.name</key>
+                            <value>${hotrod.security.server.name}</value>
                         </systemProperty>
                     </systemProperties>
                 </configuration>

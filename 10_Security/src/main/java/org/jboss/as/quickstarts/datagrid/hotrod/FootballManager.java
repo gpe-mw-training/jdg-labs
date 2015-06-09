@@ -61,7 +61,7 @@ public class FootballManager {
 
     private static final String teamsKey = "teams";
     private static final String REALM = "ApplicationRealm";
-    private static final String SERVER_NAME = "football";
+    private static final String SERVER_NAME = "hotrod.security.server.name";
 
     private Console con;
     private RemoteCacheManager cacheManager;
@@ -196,7 +196,7 @@ public class FootballManager {
         config.addServer().host(jdgProperty(JDG_HOST)).port(Integer.parseInt(jdgProperty(HOTROD_PORT)));
         // add configuration for authentication
         config.security().authentication()
-                .serverName(SERVER_NAME) //define server name, should be specified in XML configuration
+                .serverName(jdgProperty(SERVER_NAME)) //define server name, should be specified in XML configuration
                 .saslMechanism("DIGEST-MD5") // define SASL mechanism, in this example we use DIGEST with MD5 hash
                 .callbackHandler(new LoginHandler(login, password, REALM)) // define login handler, implementation defined
                 .enable();
