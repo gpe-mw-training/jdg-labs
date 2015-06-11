@@ -23,5 +23,90 @@
     <artifactId>08_EventsAndListeners</artifactId>
     <version>1.0</version>
 
+    <properties>
+
+        <!-- **** CHANGE ME ***** -->
+        <hostname>docker1.ose.opentlc.com</hostname>
+        <hotrod.port>11222</hotrod.port>
+
+        <main.class.endpoint>org.jboss.as.quickstarts.datagrid.hotrod.FootballManager</main.class.endpoint>
+        <version.infinispan>6.3.0.ER3-redhat-1</version.infinispan>
+        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <exec.plugin.version>1.2.1</exec.plugin.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${version.infinispan}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Import the infinispan core -->
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Import the Infinispan client hotrod -->
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-client-hotrod</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+
+            <!-- This plugin permits the execution of this quickstart through mvn exec:java command -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>${main.class.endpoint}</mainClass>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>jdg.host</key>
+                            <value>${hostname}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>jdg.hotrod.port</key>
+                            <value>${hotrod.port}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>jdg.rest.context.path</key>
+                            <value>${jdg.rest.context.path}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>jdg.cache.name</key>
+                            <value>${jdg.cache.name}</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
 
 </project>
