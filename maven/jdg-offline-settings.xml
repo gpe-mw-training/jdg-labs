@@ -23,16 +23,47 @@
      Default local maven repository is ~/.m2/repository
      Its recommended that student's use a fresh local maven repository.
      If you want to start and use a different local maven repository than your default, then uncomment and modifiy this next line -->
-   <localRepository>/u02/maven/defaultrepo</localRepository>
+ <!--  <localRepository>file:///Users/hchin/Downloads/jboss-datagrid-6.5.0-GA-maven-repository/</localRepository> -->
 
-   <profiles>
-      <profile>
+ <profiles>
+
+    <!-- Configure the JBoss EAP Maven repository -->
+    <profile>
+      <id>jboss-eap-repository</id>
+      <repositories>
+        <repository>
+          <id>jboss-eap-repository</id>
+          <url>file:///REPLACE_ME_WITH_CORRECT_DIR/jboss-eap-6.3.0.GA-maven-repository</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>jboss-eap-plugin-repository</id>
+          <url>file:///REPLACE_ME_WITH_CORRECT_DIR/jboss-eap-6.3.0.GA-maven-repository</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+    
+     <!-- Configure the JBoss DG Maven repository -->
+    <profile>
          <id>jboss-datagrid-repository</id>
          <repositories>
             <repository>
-               <id>techpreview-all-repository</id>
-               <name>Red Hat Enterprise Maven Repository</name>
-               <url>http://maven.repository.redhat.com/techpreview/all/</url>
+               <id>jboss-datagrid-repository</id>
+               <name>JBoss Data Grid Maven Repository</name>
+               <url>file:///REPLACE_ME_WITH_CORRECT_DIR/jboss-datagrid-6.5.0-Beta-maven-repository</url>
                <layout>default</layout>
                <releases>
                   <enabled>true</enabled>
@@ -44,12 +75,9 @@
                </snapshots>
             </repository>
             <repository>
-               <id>jboss-datagrid-repository</id>
-               <name>JBoss Data Grid Maven Repository</name>
-
-               <!-- *****  CHANGE ME !!!! ********* -->
-               <url>file:///u02/maven/jboss-datagrid-6.5.0-maven-repository</url>
-
+               <id>techpreview-all-repository</id>
+               <name>Red Hat Enterprise Maven Repository</name>
+               <url>http://maven.repository.redhat.com/techpreview/all/</url>
                <layout>default</layout>
                <releases>
                   <enabled>true</enabled>
@@ -62,7 +90,21 @@
             </repository>
          </repositories>
          <pluginRepositories>
-         	<pluginRepository>
+            <pluginRepository>
+               <id>jboss-datagrid-repository</id>
+               <name>JBoss Data Grid Maven Repository</name>
+               <url>file:///REPLACE_ME_WITH_CORRECT_DIR/jboss-datagrid-6.5.0-Beta-maven-repository</url>
+               <layout>default</layout>
+               <releases>
+                  <enabled>true</enabled>
+                  <updatePolicy>never</updatePolicy>
+               </releases>
+               <snapshots>
+                  <enabled>false</enabled>
+                  <updatePolicy>never</updatePolicy>
+               </snapshots>
+            </pluginRepository>
+            <pluginRepository>
                <id>techpreview-all-repository</id>
                <name>Red Hat Enterprise Maven Repository</name>
                <url>http://maven.repository.redhat.com/techpreview/all/</url>
@@ -76,30 +118,15 @@
                   <updatePolicy>never</updatePolicy>
                </snapshots>
             </pluginRepository>
-            <pluginRepository>
-               <id>jboss-datagrid-repository</id>
-               <name>JBoss Data Grid Maven Repository</name>
-
-               <!-- *****  CHANGE ME !!!! ********* -->
-               <url>file:///u02/maven/jboss-datagrid-6.5.0-maven-repository</url>
-
-               <layout>default</layout>
-               <releases>
-                  <enabled>true</enabled>
-                  <updatePolicy>never</updatePolicy>
-               </releases>
-               <snapshots>
-                  <enabled>false</enabled>
-                  <updatePolicy>never</updatePolicy>
-               </snapshots>
-            </pluginRepository>
          </pluginRepositories>
       </profile>
-   </profiles>
+  </profiles>
 
-   <activeProfiles>
-      <activeProfile>jboss-datagrid-repository</activeProfile>
-   </activeProfiles>
+  <activeProfiles>
+    <!-- Optionally, make the repositories active by default -->
+    <activeProfile>jboss-eap-repository</activeProfile>
+    <activeProfile>jboss-datagrid-repository</activeProfile>
+  </activeProfiles>
 
 </settings>
 

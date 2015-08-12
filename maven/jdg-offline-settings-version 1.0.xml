@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <!-- Overview: 
+       This maven settings.xml makes use of a local JBoss Data Grid Maven repository (as opposed to the online JBoss Data Grid Maven repo).
+       It assumes you have already downloaded the JBoss Data Grid Maven repo from the Red Hat Support Portal and have unzipped in your local workstation.
+  -->
+
+  <!-- Usage:
+       1)  replace your existing ~/.m2/settings.xml with this file
+                     or
+       2)  execute maven commands at the command line using the -s flag, ie:
+              mvn clean package -s /path/to/this/jdg-offline-settings.xml
+                    or
+        3) configure JBoss Developer Studio to use this jdg-offline-settings.xml:
+            a) In JBDS, navigate to: Window -> Preferences -> Maven -> User Settings
+            b) Modify the value of User Settings to that it reference this file
+            c) Click Apply and then Save
+  -->
+
+   <!-- Local Maven Repo:
+     Default local maven repository is ~/.m2/repository
+     Its recommended that student's use a fresh local maven repository.
+     If you want to start and use a different local maven repository than your default, then uncomment and modifiy this next line -->
+   <localRepository>/u02/maven/defaultrepo</localRepository>
+
+   <profiles>
+      <profile>
+         <id>jboss-datagrid-repository</id>
+         <repositories>
+            <repository>
+               <id>techpreview-all-repository</id>
+               <name>Red Hat Enterprise Maven Repository</name>
+               <url>http://maven.repository.redhat.com/techpreview/all/</url>
+               <layout>default</layout>
+               <releases>
+                  <enabled>true</enabled>
+                  <updatePolicy>never</updatePolicy>
+               </releases>
+               <snapshots>
+                  <enabled>false</enabled>
+                  <updatePolicy>never</updatePolicy>
+               </snapshots>
+            </repository>
+            <repository>
+               <id>jboss-datagrid-repository</id>
+               <name>JBoss Data Grid Maven Repository</name>
+
+               <!-- *****  CHANGE ME !!!! ********* -->
+               <url>file:///u02/maven/jboss-datagrid-6.5.0-maven-repository</url>
+
+               <layout>default</layout>
+               <releases>
+                  <enabled>true</enabled>
+                  <updatePolicy>never</updatePolicy>
+               </releases>
+               <snapshots>
+                  <enabled>false</enabled>
+                  <updatePolicy>never</updatePolicy>
+               </snapshots>
+            </repository>
+         </repositories>
+         <pluginRepositories>
+         	<pluginRepository>
+               <id>techpreview-all-repository</id>
+               <name>Red Hat Enterprise Maven Repository</name>
+               <url>http://maven.repository.redhat.com/techpreview/all/</url>
+               <layout>default</layout>
+               <releases>
+                  <enabled>true</enabled>
+                  <updatePolicy>never</updatePolicy>
+               </releases>
+               <snapshots>
+                  <enabled>false</enabled>
+                  <updatePolicy>never</updatePolicy>
+               </snapshots>
+            </pluginRepository>
+            <pluginRepository>
+               <id>jboss-datagrid-repository</id>
+               <name>JBoss Data Grid Maven Repository</name>
+
+               <!-- *****  CHANGE ME !!!! ********* -->
+               <url>file:///u02/maven/jboss-datagrid-6.5.0-maven-repository</url>
+
+               <layout>default</layout>
+               <releases>
+                  <enabled>true</enabled>
+                  <updatePolicy>never</updatePolicy>
+               </releases>
+               <snapshots>
+                  <enabled>false</enabled>
+                  <updatePolicy>never</updatePolicy>
+               </snapshots>
+            </pluginRepository>
+         </pluginRepositories>
+      </profile>
+   </profiles>
+
+   <activeProfiles>
+      <activeProfile>jboss-datagrid-repository</activeProfile>
+   </activeProfiles>
+
+</settings>
+
+
