@@ -21,11 +21,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-/*import org.infinispan.client.hotrod.RemoteCache;
+import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
 
-@author Martin Gencur
 
 public class FootballManager {
 
@@ -162,4 +161,3 @@ public class FootballManager {
         return System.getProperty(name);
     }
 }
- */

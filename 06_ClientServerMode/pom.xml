@@ -25,15 +25,6 @@
     <name>OPEN Program Lab 6</name>
     <description>Client Server Mode</description>
 
-    <url>http://jboss.org/jbossas</url>
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <distribution>repo</distribution>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-        </license>
-    </licenses>
-
     <properties>
         <hostname>docker1.ose.opentlc.com</hostname>
         <cli.port>9999</cli.port>
@@ -71,10 +62,27 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${version.infinispan}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
+    <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-client-hotrod</artifactId>
+            <scope>compile</scope>
+        </dependency>
     	<dependency>
             <groupId>org.jboss.spec.javax.websocket</groupId>
             <artifactId>jboss-websocket-api_1.0_spec</artifactId>
@@ -111,7 +119,52 @@
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
                 <version>${version.jboss.maven.plugin}</version>
+                <configuration>
+                    <execute-commands>
+                        <scripts>
+                            <script>src/main/resources/${cli.script}</script>
+                        </scripts>
+                    </execute-commands>
+                    <hostname>${hostname}</hostname>
+                    <port>${cli.port}</port>
+                    <username>${username}</username>
+                    <password>${password}</password>
+                </configuration>
             </plugin>
+             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>${main.class.endpoint}</mainClass>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>jdg.host</key>
+                            <value>${hostname}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>jdg.hotrod.port</key>
+                            <value>${hotrod.port}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>jdg.rest.context.path</key>
+                            <value>${jdg.rest.context.path}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>jdg.cache.name</key>
+                            <value>${jdg.cache.name}</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+            
         </plugins>
     </build>
 </project>
