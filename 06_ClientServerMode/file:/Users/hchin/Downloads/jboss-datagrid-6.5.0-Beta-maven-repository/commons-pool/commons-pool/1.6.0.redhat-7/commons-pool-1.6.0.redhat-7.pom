@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-parent</artifactId>
+    <version>22</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>commons-pool</groupId>
+  <artifactId>commons-pool</artifactId>
+  <version>1.6.0.redhat-7</version>
+  <name>Commons Pool</name>
+
+  <inceptionYear>2001</inceptionYear>
+  <description>Commons Object Pooling Library</description>
+
+  <url>http://commons.apache.org/pool/</url>
+
+  <issueManagement>
+    <system>jira</system>
+    <url>http://issues.apache.org/jira/browse/POOL</url>
+  </issueManagement>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/pool/trunk</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/pool/trunk</developerConnection>
+    <url>http://svn.apache.org/viewvc/commons/proper/pool/trunk</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Morgan Delagrange</name>
+      <id>morgand</id>
+      <email></email>
+      <organization></organization>
+    </developer>
+    <developer>
+      <name>Geir Magnusson</name>
+      <id>geirm</id>
+      <email></email>
+      <organization></organization>
+    </developer>
+    <developer>
+      <name>Craig McClanahan</name>
+      <id>craigmcc</id>
+      <email></email>
+      <organization></organization>
+    </developer>
+    <developer>
+      <name>Rodney Waldhoff</name>
+      <id>rwaldhoff</id>
+      <email></email>
+      <organization></organization>
+    </developer>
+    <developer>
+      <name>David Weinrich</name>
+      <id>dweinr1</id>
+      <email></email>
+      <organization></organization>
+    </developer>
+    <developer>
+      <name>Dirk Verbeeck</name>
+      <id>dirkv</id>
+      <email></email>
+      <organization></organization>
+    </developer>
+    <developer>
+      <name>Robert Burrell Donkin</name>
+      <id>rdonkin</id>
+      <email></email>
+      <organization>Apache Software Foundation</organization>
+    </developer>
+    <developer>
+      <name>Sandy McArthur</name>
+      <id>sandymac</id>
+      <email></email>
+      <organization>Apache Software Foundation</organization>
+    </developer>
+    <developer>
+      <name>Gary Gregory</name>
+      <id>ggregory</id>
+      <email></email>
+      <organization>Apache Software Foundation</organization>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor>
+      <name>Todd Carmichael</name>
+      <email>toddc@concur.com</email>
+    </contributor>
+  </contributors>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <commons.componentid>pool</commons.componentid>
+    <commons.release.version>${project.version}</commons.release.version>
+    <commons.jira.id>POOL</commons.jira.id>
+    <commons.jira.pid>12310488</commons.jira.pid>
+    <!-- **************** -->
+        <!-- Plugins versions -->
+        <!-- **************** -->
+        <version.assembly.plugin>2.4</version.assembly.plugin>
+        <version.buildnumber.plugin>1.2</version.buildnumber.plugin>
+        <version.bundle.plugin>2.3.7</version.bundle.plugin>
+        <version.compiler.plugin>3.1</version.compiler.plugin>
+        <version.jar.plugin>2.4</version.jar.plugin>
+        <version.javadoc.plugin>2.9.1</version.javadoc.plugin>
+        <version.source.plugin>2.2.1</version.source.plugin>
+
+        <!-- ************** -->
+        <!-- Build settings -->
+        <!-- ************** -->
+
+        <!-- Cross plugins settings -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- maven-compiler-plugin -->
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.6</maven.compiler.source>
+
+        <!--
+                         Options to override the compiler arguments directly on the compiler arument line to separate between what
+            the IDE understands as the source level and what the Maven compiler actually use.
+         -->
+        <maven.compiler.argument.target>${maven.compiler.target}</maven.compiler.argument.target>
+        <maven.compiler.argument.source>${maven.compiler.source}</maven.compiler.argument.source>
+
+        <!-- maven-enforcer-plugin -->
+        <maven.min.version>3.0.3</maven.min.version>
+        <jdk.min.version>${maven.compiler.argument.source}</jdk.min.version>
+  </properties>
+
+  <distributionManagement>
+    <!-- Cannot define in parent ATM, see COMMONSSITE-26 -->
+    <site>
+      <id>apache.website</id>
+      <name>Apache Commons Site</name>
+      <url>${commons.deployment.protocol}://people.apache.org/www/commons.apache.org/${commons.componentid}</url>
+    </site>
+  </distributionManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.0</version>
+          <dependencies>
+            <dependency>
+              <!-- add support for ssh/scp -->
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-ssh</artifactId>
+              <version>2.2</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${version.assembly.plugin}</version>
+        <configuration>
+          <archive>
+            <index>true</index>
+            <manifest>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+            <manifestEntries>
+               <Implementation-URL>${project.url}</Implementation-URL>
+               <Java-Version>${java.version}</Java-Version>
+               <Java-Vendor>${java.vendor}</Java-Vendor>
+               <Os-Name>${os.name}</Os-Name>
+               <Os-Arch>${os.arch}</Os-Arch>
+               <Os-Version>${os.version}</Os-Version>
+               <Scm-Url>${project.scm.url}</Scm-Url>
+               <Scm-Connection>${project.scm.connection}</Scm-Connection>
+               <Scm-Revision>${buildNumber}</Scm-Revision>
+               <Build-Timestamp>${build.datetime}</Build-Timestamp>
+             </manifestEntries>
+           </archive>
+         </configuration>
+       </plugin>
+       <plugin>
+         <groupId>org.codehaus.mojo</groupId>
+         <artifactId>buildnumber-maven-plugin</artifactId>
+         <version>${version.buildnumber.plugin}</version>
+       </plugin>
+       <plugin>
+         <groupId>org.apache.felix</groupId>
+         <artifactId>maven-bundle-plugin</artifactId>
+         <version>${version.bundle.plugin}</version>
+         <configuration>
+           <archive>
+             <index>true</index>
+             <manifest>
+               <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+             </manifest>
+             <manifestEntries>
+               <Implementation-URL>${project.url}</Implementation-URL>
+               <Java-Version>${java.version}</Java-Version>
+               <Java-Vendor>${java.vendor}</Java-Vendor>
+               <Os-Name>${os.name}</Os-Name>
+               <Os-Arch>${os.arch}</Os-Arch>
+               <Os-Version>${os.version}</Os-Version>
+               <Scm-Url>${project.scm.url}</Scm-Url>
+               <Scm-Connection>${project.scm.connection}</Scm-Connection>
+              </manifestEntries>
+            </archive>
+            <instructions>
+              <Scm-Revision>${buildNumber}</Scm-Revision>
+              <Build-Timestamp>${build.datetime}</Build-Timestamp>
+            </instructions>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${version.compiler.plugin}</version>
+          <configuration>
+            <showDeprecation>true</showDeprecation>
+            <showWarnings>true</showWarnings>
+              <compilerArguments>
+                <source>${maven.compiler.argument.source}</source>
+                <target>${maven.compiler.argument.target}</target>
+              </compilerArguments>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>${version.jar.plugin}</version>
+            <configuration>
+              <archive>
+                <index>true</index>
+                <manifest>
+                  <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                  <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                </manifest>
+                <manifestEntries>
+                  <Implementation-URL>${project.url}</Implementation-URL>
+                  <Java-Version>${java.version}</Java-Version>
+                  <Java-Vendor>${java.vendor}</Java-Vendor>
+                  <Os-Name>${os.name}</Os-Name>
+                  <Os-Arch>${os.arch}</Os-Arch>
+                  <Os-Version>${os.version}</Os-Version>
+                  <Scm-Url>${project.scm.url}</Scm-Url>
+                  <Scm-Connection>${project.scm.connection}</Scm-Connection>
+                  <Scm-Revision>${buildNumber}</Scm-Revision>
+                  <Build-Timestamp>${build.datetime}</Build-Timestamp>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${version.javadoc.plugin}</version>
+            <configuration>
+              <header>&lt;b&gt;${project.name} ${project.version}&lt;/b&gt;</header>
+              <footer>&lt;b&gt;${project.name} ${project.version}&lt;/b&gt;</footer>
+              <archive>
+                <index>true</index>
+                <manifest>
+                  <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                  <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                </manifest>
+                <manifestEntries>
+                  <Implementation-URL>${project.url}</Implementation-URL>
+                  <Java-Version>${java.version}</Java-Version>
+                  <Java-Vendor>${java.vendor}</Java-Vendor>
+                  <Os-Name>${os.name}</Os-Name>
+                  <Os-Arch>${os.arch}</Os-Arch>
+                  <Os-Version>${os.version}</Os-Version>
+                  <Scm-Url>${project.scm.url}</Scm-Url>
+                  <Scm-Connection>${project.scm.connection}</Scm-Connection>
+                  <Scm-Revision>${buildNumber}</Scm-Revision>
+                  <Build-Timestamp>${build.datetime}</Build-Timestamp>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>${version.source.plugin}</version>
+            <configuration>
+              <archive>
+                <index>true</index>
+                <manifest>
+                  <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                  <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                </manifest>
+                <manifestEntries>
+                  <Implementation-URL>${project.url}</Implementation-URL>
+                  <Java-Version>${java.version}</Java-Version>
+                  <Java-Vendor>${java.vendor}</Java-Vendor>
+                  <Os-Name>${os.name}</Os-Name>
+                  <Os-Arch>${os.arch}</Os-Arch>
+                  <Os-Version>${os.version}</Os-Version>
+                  <Scm-Url>${project.scm.url}</Scm-Url>
+                  <Scm-Connection>${project.scm.connection}</Scm-Connection>
+                  <Scm-Revision>${buildNumber}</Scm-Revision>
+                  <Build-Timestamp>${build.datetime}</Build-Timestamp>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>
+      </plugins>
+    </pluginManagement>
+  
+    <sourceDirectory>src/java</sourceDirectory>
+    <testSourceDirectory>src/test</testSourceDirectory>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <includes>
+                <include>**/Test*.java</include>
+              </includes>
+              <excludes>
+                <!-- nested classes are not handled properly by Surefire -->
+                <exclude>**/Test*$*.java</exclude>
+                <exclude>org/apache/commons/pool/impl/TestSoftRefOutOfMemory.java</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+
+        <!-- plugin to generate apache-commons-pool-tomcat sources --> 
+          <plugin>
+              <artifactId>maven-resources-plugin</artifactId>
+              <executions>
+                  <execution>
+                      <id>copy-tomcat-sources</id>
+                      <phase>generate-sources</phase>
+                      <goals>
+                          <goal>copy-resources</goal>
+                      </goals>
+                      <configuration>
+                          <outputDirectory>${project.build.sourceDirectory}/org/apache/tomcat/dhcp/pool</outputDirectory>
+                          <resources>
+                              <resource>
+                                  <directory>${project.build.sourceDirectory}/org/apache/commons/pool</directory>
+                                  <includes>
+                                      <include>**/*.java</include>
+                                  </includes>
+                                  <excludes>
+                                      <exclude>**/Stack*.java</exclude>
+                                      <exclude>**/SoftReferenceObjectPool.java</exclude>
+                                      <exclude>**/test/**</exclude>
+                                  </excludes>
+                              </resource>
+                          </resources>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
+
+         <!-- plugin to do replacement for tomcat sources -->
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>process-sources</phase>
+                <configuration>
+                  <tasks>
+                    <replace token="return UnmodifiableList.decorate(l);" value="return l;" dir="${project.build.sourceDirectory}/org/apache/tomcat/dhcp/pool">                                 
+                      <include name="**/*.java"></include>
+                    </replace>
+                    <replace token="import org.apache.commons.collections.list.UnmodifiableList;" value=" " dir="${project.build.sourceDirectory}/org/apache/tomcat/dhcp/pool">                                 
+                      <include name="**/*.java"></include>
+                    </replace>
+                    <replace token="org.apache.commons" value="org.apache.tomcat.dbcp" dir="${project.build.sourceDirectory}/org/apache/tomcat/dhcp/pool">                                 
+                      <include name="**/*.java"></include>
+                    </replace>
+                  </tasks>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <!-- plugin to exclude tomcat class in original jar -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+              <excludes>
+                <exclude>**/tomcat/**</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>create-assemblies</id>
+              <goals>
+                <goal>single</goal>
+              </goals>
+              <phase>package</phase>
+              <configuration>
+                <descriptors>
+                  <descriptor>src/assembly/bin.xml</descriptor>
+                  <descriptor>src/assembly/src.xml</descriptor>
+                  <descriptor>src/assembly/tomcat.xml</descriptor>
+                </descriptors>
+                <tarLongFileMode>gnu</tarLongFileMode>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              </manifest>
+              <manifestEntries>
+                <Implementation-Vendor-Id>org.apache</Implementation-Vendor-Id>
+              </manifestEntries>
+            </archive>
+            <excludes>
+              <exclude>**/tomcat/**</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              </manifest>
+              <manifestEntries>
+                <Implementation-Vendor-Id>org.apache</Implementation-Vendor-Id>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
+        <!-- Check for the minimum version of Java and Maven. Runs during the validate phase. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-java-version</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <message>To build this project JDK ${jdk.min.version} (or greater) is required. Please install it.</message>
+                  <version>${jdk.min.version}</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+          <execution>
+            <id>enforce-maven-version</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <message>To build this project Maven ${maven.min.version} (or greater) is required. Please install it.</message>
+                  <version>${maven.min.version}</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Set properties containing the scm revision and build timestamp -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>get-build-timestamp</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>create-timestamp</goal>
+            </goals>
+            <configuration>
+              <!-- Example date: Wed, 4 Jul 2001 12:08:56 -0700 -->
+              <timestampFormat>EEE, d MMM yyyy HH:mm:ss Z</timestampFormat>
+              <timestampPropertyName>build.datetime</timestampPropertyName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>get-scm-revision</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>create</goal>
+            </goals>
+            <configuration>
+              <doCheck>false</doCheck>
+              <doUpdate>false</doUpdate>
+              <revisionOnScmFailure>UNKNOWN</revisionOnScmFailure>
+              <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.commonjava.maven.plugins</groupId>
+        <artifactId>project-sources-maven-plugin</artifactId>
+        <version>0.3</version>
+        <executions>
+          <execution>
+            <id>project-sources-archive</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>archive</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.redhat.rcm.maven.plugin</groupId>
+        <artifactId>buildmetadata-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <executions>
+          <execution>
+            <id>build-metadata</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>provide-buildmetadata</goal>
+            </goals>
+            <configuration>
+              <validateCheckout>false</validateCheckout>
+              <hideJavaOptsInfo>false</hideJavaOptsInfo>
+              <activateOutputFileMapping>false</activateOutputFileMapping>
+              <createXmlReport>false</createXmlReport>
+              <hideCommandLineInfo>false</hideCommandLineInfo>
+              <propertiesOutputFile>${basedir}/build.properties</propertiesOutputFile>
+              <createPropertiesReport>true</createPropertiesReport>
+              <addMavenExecutionInfo>true</addMavenExecutionInfo>
+              <addLocallyModifiedTagToFullVersion>false</addLocallyModifiedTagToFullVersion>
+              <addJavaRuntimeInfo>true</addJavaRuntimeInfo>
+              <hideMavenOptsInfo>false</hideMavenOptsInfo>
+              <addToGeneratedSources>false</addToGeneratedSources>
+              <forceNewProperties>true</forceNewProperties>
+            </configuration>
+          </execution>
+        </executions>
+        <inherited>false</inherited>
+      </plugin>
+      </plugins>
+    </build>
+</project>
+<!-- Modified by POM Manipulation Extension for Maven 0.10 ( SHA: 13d852f2 ) -->
+
