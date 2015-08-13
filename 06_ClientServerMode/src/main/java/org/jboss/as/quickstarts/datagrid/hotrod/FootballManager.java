@@ -25,9 +25,7 @@ import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
 
-/**
- * @author Martin Gencur
- */
+
 public class FootballManager {
 
     private static final String JDG_HOST = "jdg.host";

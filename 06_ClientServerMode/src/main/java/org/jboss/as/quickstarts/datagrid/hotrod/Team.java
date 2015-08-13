@@ -20,9 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Martin Gencur
- */
+
 public class Team implements Serializable {
 
     private static final long serialVersionUID = -181403229462007401L;
