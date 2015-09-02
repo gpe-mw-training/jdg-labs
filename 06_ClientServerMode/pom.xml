@@ -18,20 +18,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.jboss.as.quickstarts.datagrid.hotrod</groupId>
+    <groupId>com.redhat.ge.jdg</groupId>
     <artifactId>06_ClientServerMode</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
-    <name>OPEN Program Lab 6</name>
+    <name>FootballManager</name>
     <description>Client Server Mode</description>
 
     <properties>
+     
         <hostname>docker1.ose.opentlc.com</hostname>
-        <cli.port>9999</cli.port>
-        <cli.script>jdg_modifyhotrod.cli</cli.script>
+        <cli.port>11999</cli.port>
         <username>admin</username>
         <password>jb0ssredhat!</password>
+        <cli.script>jdg_modifyhotrod.cli</cli.script>
         <hotrod.port>11222</hotrod.port>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
 		<main.class.endpoint>org.jboss.as.quickstarts.datagrid.hotrod.FootballManager</main.class.endpoint>
@@ -167,4 +169,31 @@
             
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>deploy</id>
+
+            <!-- jboss-as-maven-plugin to deploy war -->
+            <!-- execution:  mvn jboss-as:execute-commands -s ~/.m2/jdg-offline-settings.xml -P deploy -->
+            <build><plugins><plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>${version.jboss.maven.plugin}</version>
+
+                <configuration>
+                    <execute-commands>
+                        <commands>
+                            <command>deploy target/${project.name}.war </command>
+                        </commands>
+                    </execute-commands>
+                    <hostname>${hostname}</hostname>
+                    <port>${cli.port}</port>
+                    <username>${username}</username>
+                    <password>${password}</password>
+                    <timeout>10000</timeout>
+                </configuration>
+            </plugin></plugins></build>
+        </profile>
+    </profiles>
 </project>
