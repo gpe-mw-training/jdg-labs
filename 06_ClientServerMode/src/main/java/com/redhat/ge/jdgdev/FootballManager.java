@@ -14,16 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.as.quickstarts.datagrid.hotrod;
+package com.redhat.ge.jdgdev;
 
-import java.io.Console;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
+
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
+
+import java.util.Properties;
 
 
 public class FootballManager {
@@ -32,23 +33,16 @@ public class FootballManager {
     private static final String HOTROD_PORT = "jdg.hotrod.port";
     private static final String PROPERTIES_FILE = "jdg.properties";
     private static final String msgTeamMissing = "The specified team \"%s\" does not exist, choose next operation\n";
-    private static final String msgEnterTeamName = "Enter team name: ";
-    private static final String initialPrompt = "Choose action:\n" + "============= \n" + "at  -  add a team\n"
-            + "ap  -  add a player to a team\n" + "rt  -  remove a team\n" + "rp  -  remove a player from a team\n"
-            + "p   -  print all teams and players\n" + "q   -  quit\n";
     private static final String teamsKey = "teams";
-
-    private Console con;
     private RemoteCacheManager cacheManager;
     private RemoteCache<String, Object> cache;
 
-    public FootballManager(Console con) {
-        this.con = con;
+    public FootballManager() {
         ConfigurationBuilder builder = new ConfigurationBuilder();
+        System.out.println("FootballManager App host = "+jdgProperty(JDG_HOST)+" || port = "+jdgProperty(HOTROD_PORT));
         builder.addServer()
               .host(jdgProperty(JDG_HOST))
               .port(Integer.parseInt(jdgProperty(HOTROD_PORT)));
-        System.out.println("FootballManager() host = "+jdgProperty(JDG_HOST)+" : port = "+jdgProperty(HOTROD_PORT));
         cacheManager = new RemoteCacheManager(builder.build());
         cache = cacheManager.getCache("teams");
         if(!cache.containsKey(teamsKey)) {
@@ -63,8 +57,8 @@ public class FootballManager {
         }
     }
 
-    public void addTeam() {
-        String teamName = con.readLine(msgEnterTeamName);
+    public void addTeam(String name) {
+        String teamName = name;
         @SuppressWarnings("unchecked")
         List<String> teams = (List<String>) cache.get(teamsKey);
         if (teams == null) {
@@ -77,34 +71,28 @@ public class FootballManager {
         cache.put(teamsKey, teams);
     }
 
-    public void addPlayers() {
-        String teamName = con.readLine(msgEnterTeamName);
-        String playerName = null;
+    public void addPlayer(String playerName, String teamName) 
+    {
         Team t = (Team) cache.get(teamName);
         if (t != null) {
-            while (!(playerName = con.readLine("Enter player's name (to stop adding, type \"q\"): ")).equals("q")) {
                 t.addPlayer(playerName);
-            }
             cache.put(teamName, t);
         } else {
-            con.printf(msgTeamMissing, teamName);
-        }
+            System.out.printf(msgTeamMissing, teamName);       
     }
-
-    public void removePlayer() {
-        String playerName = con.readLine("Enter player's name: ");
-        String teamName = con.readLine("Enter player's team: ");
+    }
+    
+    public void removePlayer(String playerName, String teamName) {
         Team t = (Team) cache.get(teamName);
         if (t != null) {
             t.removePlayer(playerName);
             cache.put(teamName, t);
         } else {
-            con.printf(msgTeamMissing, teamName);
+        	System.out.printf(msgTeamMissing, teamName);
         }
     }
 
-    public void removeTeam() {
-        String teamName = con.readLine(msgEnterTeamName);
+    public void removeTeam(String teamName) {
         Team t = (Team) cache.get(teamName);
         if (t != null) {
             cache.remove(teamName);
@@ -115,49 +103,59 @@ public class FootballManager {
             }
             cache.put(teamsKey, teams);
         } else {
-            con.printf(msgTeamMissing, teamName);
+        	System.out.printf(msgTeamMissing, teamName);
         }
     }
 
-    public void printTeams() {
+    public String printTeams() {
         @SuppressWarnings("unchecked")
         List<String> teams = (List<String>) cache.get(teamsKey);
+        StringBuilder output = new StringBuilder();
         if (teams != null) {
             for (String teamName : teams) {
-                con.printf(cache.get(teamName).toString());
+            	String a = cache.get(teamName).toString();
+                output.append(a);
+                System.out.println(a);
             }
         }
+        return output.toString();
     }
 
     public void stop() {
         cacheManager.stop();
     }
 
-    public static void main(String[] args) {
-        Console con = System.console();
-        FootballManager manager = new FootballManager(con);
-        con.printf(initialPrompt);
+//    public static void main(String[] args) {
+//        Console con = System.console();
+//        FootballManager manager = new FootballManager();
+//        con.printf(initialPrompt);
+//  while (true) { }
+//  String action = con.readLine(">");
+//                break;
+    //    public void controller(String command, String playerName, String teamName) {
+    //      if ("at".equals(command)) {
+    //          addTeam(teamName);
+    //        } else if ("ap".equals(command)) {
+    //           addPlayer(playerName,teamName);
+    //       } else if ("rt".equals(command)) {
+    //           removeTeam(teamName);
+    //       } else if ("rp".equals(command)) {
+    //           removePlayer(playerName, teamName);
+    //       } else if ("p".equals(command)) {
+    //           printTeams();
+    //       } 
+    //}
 
-        while (true) {
-            String action = con.readLine(">");
-            if ("at".equals(action)) {
-                manager.addTeam();
-            } else if ("ap".equals(action)) {
-                manager.addPlayers();
-            } else if ("rt".equals(action)) {
-                manager.removeTeam();
-            } else if ("rp".equals(action)) {
-                manager.removePlayer();
-            } else if ("p".equals(action)) {
-                manager.printTeams();
-            } else if ("q".equals(action)) {
-                manager.stop();
-                break;
-            }
+    public String jdgProperty(String name) {
+    	Properties props = new Properties();
+        try {
+            props.load(this.getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE));
+ 
+        } catch (IOException ioe) {
+            System.out.println(ioe);
+            throw new RuntimeException(ioe);
         }
+        return props.getProperty(name);
     }
 
-    public static String jdgProperty(String name) {
-        return System.getProperty(name);
-    }
 }
