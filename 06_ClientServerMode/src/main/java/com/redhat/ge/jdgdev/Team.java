@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.as.quickstarts.datagrid.hotrod;
+package com.redhat.ge.jdgdev;
 
 import java.io.Serializable;
 import java.util.ArrayList;

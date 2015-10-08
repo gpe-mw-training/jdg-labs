@@ -1,5 +1,14 @@
 batch
 
+    # ADD a local cache called 'teams
+    /subsystem=infinispan/cache-container=local/local-cache=teams:add(start=EAGER,batching=false)
+
+    # Define the locking isolation of this cache
+    /subsystem=infinispan/cache-container=local/local-cache=teams/locking=LOCKING:add(acquire-timeout=20000, concurrency-level=500, striping="false")
+
+    # previous modifications to the JDG server require EAP to be reloaded
+    :reload
+
     # Modify the cache-container on the hotrod endpoint
     /subsystem=endpoint/hotrod-connector=hotrod-connector/:write-attribute(name=cache-container,value=gpeclustered)
     /subsystem=infinispan/cache-container=gpeclustered/:write-attribute(name=default-cache,value=teams)
@@ -8,4 +17,3 @@ batch
     :reload
 
 run-batch
-
